@@ -15,13 +15,13 @@ exclude = ["src/testdata", "tests/**"]
 build = "build.rs"
 
 [features]
-default = ["aws_lc_rs", "logging", "std", "tls12"]
+default = ["ring", "logging", "std", "tls12"]
 
-aws-lc-rs = ["aws_lc_rs"] # Alias because Cargo features commonly use `-`
-aws_lc_rs = ["dep:aws-lc-rs", "webpki/aws_lc_rs"]
+aws-lc-rs = []                                            # Alias because Cargo features commonly use `-`
+aws_lc_rs = []
 brotli = ["dep:brotli", "dep:brotli-decompressor", "std"]
 custom-provider = []
-fips = ["aws_lc_rs", "aws-lc-rs?/fips"]
+fips = []
 logging = ["log"]
 prefer-post-quantum = ["aws_lc_rs"]
 read_buf = ["rustversion", "std"]
@@ -34,13 +34,15 @@ zlib = ["dep:zlib-rs"]
 rustversion = { version = "1.0.6", optional = true }
 
 [dependencies]
-aws-lc-rs = { workspace = true, optional = true }
 brotli = { workspace = true, optional = true }
 brotli-decompressor = { workspace = true, optional = true }
 hashbrown = { workspace = true, optional = true }
 log = { workspace = true, optional = true }
 # only required for no-std
-once_cell = { version = "1.16", default-features = false, features = ["alloc", "race"] }
+once_cell = { version = "1.16", default-features = false, features = [
+    "alloc",
+    "race",
+] }
 ring = { workspace = true, optional = true }
 subtle = { workspace = true }
 webpki = { workspace = true }
@@ -62,6 +64,13 @@ serde_json = { workspace = true }
 time = { workspace = true }
 webpki-roots = { workspace = true }
 x509-parser = { workspace = true }
+
+[target.'cfg(not(target_env = "msvc"))'.dev-dependencies]
+tikv-jemallocator = "0.6"
+
+[[example]]
+name = "bench"
+path = "examples/internal/bench.rs"
 
 [[bench]]
 name = "benchmarks"
@@ -117,7 +126,7 @@ rustdoc-args = ["--cfg", "docsrs"]
 
 [package.metadata.cargo_check_external_types]
 allowed_external_types = [
-  # ---
-  "rustls_pki_types",
-  "rustls_pki_types::*",
+    # ---
+    "rustls_pki_types",
+    "rustls_pki_types::*",
 ]

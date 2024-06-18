@@ -26,8 +26,8 @@ use crate::{suites, Error, NamedGroup, ProtocolVersion, SupportedProtocolVersion
 pub mod ring;
 
 /// aws-lc-rs-based CryptoProvider.
-#[cfg(feature = "aws_lc_rs")]
-pub mod aws_lc_rs;
+// #[cfg(feature = "aws_lc_rs")]
+// pub mod aws_lc_rs;
 
 /// TLS message encryption/decryption interfaces.
 pub mod cipher;
@@ -686,11 +686,11 @@ impl From<Vec<u8>> for SharedSecret {
 ///     .with_no_client_auth();
 /// # }
 /// ```
-#[cfg(all(feature = "aws_lc_rs", any(feature = "fips", docsrs)))]
-#[cfg_attr(docsrs, doc(cfg(feature = "fips")))]
-pub fn default_fips_provider() -> CryptoProvider {
-    aws_lc_rs::default_provider()
-}
+// #[cfg(all(feature = "aws_lc_rs", any(feature = "fips", docsrs)))]
+// #[cfg_attr(docsrs, doc(cfg(feature = "fips")))]
+// pub fn default_fips_provider() -> CryptoProvider {
+//     aws_lc_rs::default_provider()
+// }
 
 mod static_default {
     #[cfg(not(feature = "std"))]
